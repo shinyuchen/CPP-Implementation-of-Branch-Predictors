@@ -15,14 +15,14 @@
 class PREDICTOR
 {
   private:
-    // 8 component configuration, which follows the configurations specified in the paper (https://jilp.org/vol8/v8paper1.pdf)
+    // 5 component configuration, which follows the configurations specified in the paper (https://jilp.org/vol8/v8paper1.pdf)
     // hardware = bimodal_entries * pred_bits = 2 ^ 13 = 8192 bits
     static const int bimodal_bits = 12; 
     static const int bimodal_entries = 1 << bimodal_bits;
     static const int bimodal_pred_bits = 2; 
     int8_t *bimodal;
 
-    // 7 tagged bank predictors
+    // 4 tagged bank predictors
     // hardware = (NUM_BANK) * (entries * (3 + 2 + tag_bits)) = 57344
     static const int NUM_BANKS = 4;
     static const int ENTRY_BITS = 10;
