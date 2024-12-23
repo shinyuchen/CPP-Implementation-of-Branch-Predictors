@@ -13,8 +13,9 @@ Branch prediction is a critical technique in modern processors that aims to redu
 The TAGE (TAgged GEometric history length) predictor is a highly sophisticated branch predictor. It employs multiple tables indexed by different history lengths to capture both short- and long-term correlations. Introduced by André Seznec et al., TAGE has been a benchmark in branch prediction research:
 
 - **Reference Papers:**
-  - [The TAGE Predictor](https://people.engr.tamu.edu/djimenez/pdfs/jilp05.pdf)
-  - [The CBP-1 Competition](https://jilp.org/vol7/v7paper10.pdf)
+  - [A PPM-like, tagged-based branch predictors](https://jilp.org/vol7/v7paper10.pdf) 
+  - [The TAGE Predictor](https://jilp.org/vol8/v8paper1.pdf)
+  - [The CBP-1 Competition](https://jilp.org/cbp/)
 
 This implementation adheres to the principles outlined in these foundational papers.
 
@@ -72,8 +73,8 @@ The following table summarizes the performance of this TAGE predictor implementa
 
 ## References
 
-1. André Seznec et al., "The TAGE Predictor," [JILP, 2005](https://people.engr.tamu.edu/djimenez/pdfs/jilp05.pdf).
-2. Championship Branch Prediction (CBP-1), [JILP, 2004](https://jilp.org/vol7/v7paper10.pdf).
+1. André Seznec et al., "The TAGE Predictor," [JILP, 2005](https://jilp.org/vol8/v8paper1.pdf).
+2. Championship Branch Prediction (CBP-1), [JILP, 2004](https://jilp.org/cbp/).
 
 ---
 
