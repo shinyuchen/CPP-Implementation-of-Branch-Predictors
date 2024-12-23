@@ -24,13 +24,15 @@ class PREDICTOR
 
     // 7 tagged bank predictors
     // hardware = (NUM_BANK) * (entries * (3 + 2 + tag_bits)) = 57344
-    static const int NUM_BANKS = 7;
-    static const int ENTRY_BITS = 9;
-    static const int TAG_BITS = 11;
+    static const int NUM_BANKS = 4;
+    static const int ENTRY_BITS = 10;
+    static const int TAG_BITS = 9;
     static const int MIN_GEOMETRY_LEN = 5;
     static const int MAX_GEOMETRY_LEN = 128;
     static const int u_bits = 2;
     static const int pred_bits = 3;
+    int refresh_counter;
+    bool refresh_MSB;
     int prob;
     int total_prob;
 
@@ -38,7 +40,7 @@ class PREDICTOR
 
     struct bank_entry{
         uint16_t tag;
-        int8_t u;
+        uint8_t u;
         int8_t pred;
     };
 
@@ -94,6 +96,10 @@ class PREDICTOR
         for(int i = 0; i < MAX_GEOMETRY_LEN; i++){
             tage_ghr[i] = 0;
         }
+
+        // init refresh counter
+        refresh_counter = 1;
+        refresh_MSB = 1;
 
     }
     // uses compiler generated copy constructor
@@ -171,7 +177,6 @@ class PREDICTOR
             // update the tagged banks
 
             // update the u
-            // TODO: add the refreshing mechanism
             if(provider_component_index != -1){
                 if(altpred != pred){
                     if(pred == taken){
@@ -184,6 +189,25 @@ class PREDICTOR
                             tage_bank[provider_component_index].entry[tage_bank[provider_component_index].hash_index].u --;
                         }
                     }
+                }
+            }
+            // refreshing u every 256K branches
+            if(refresh_counter % (1 << 18) == 0){
+                if(refresh_MSB){
+                    for(int i = 0; i < NUM_BANKS; i++){
+                        for(int j = 0; j < (1 << ENTRY_BITS); j++){
+                            tage_bank[i].entry[j].u &= 0b01;
+                        }
+                    }
+                    refresh_MSB = 0;
+                }
+                else{
+                    for(int i = 0; i < NUM_BANKS; i++){
+                        for(int j = 0; j < (1 << ENTRY_BITS); j++){
+                            tage_bank[i].entry[j].u &= 0b10;
+                        }
+                    }
+                    refresh_MSB = 1;
                 }
             }
 
@@ -282,6 +306,7 @@ class PREDICTOR
                 tage_bank[i].CSR2[0] ^= taken;
                 tage_bank[i].CSR2[tage_bank[i].geometry_len % (TAG_BITS - 1)] ^= tage_ghr[tage_bank[i].geometry_len];
             }
+            refresh_counter ++;
         }
 };
 
