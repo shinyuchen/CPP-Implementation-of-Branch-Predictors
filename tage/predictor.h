@@ -63,15 +63,15 @@ class PREDICTOR
 
   public:
     PREDICTOR(void) : bimodal(), tage_ghr(), tage_bank() {
-  // init base predictor
+        // init base predictor
         bimodal = (int8_t *)malloc(bimodal_entries * sizeof(int8_t));
         for(int i = 0; i < bimodal_entries; i++){
             bimodal[i] = 1; // init to weakly not taken
         }
+
         // init banks
         for(int i = 0; i < NUM_BANKS; i++){
             // init geometry length
-            // IMPLEMENTATION DETAIL: need to add the type conversion to double to provide the correct power
             tage_bank[i].geometry_len = (int) (pow((double) (MAX_GEOMETRY_LEN / MIN_GEOMETRY_LEN), (double) i / (NUM_BANKS-1)) * MIN_GEOMETRY_LEN + 0.5);
             printf("geometry len %d = %d\n", i, tage_bank[i].geometry_len);
             // init CSR
@@ -112,7 +112,6 @@ class PREDICTOR
     // wants to make.  Keep in mind you're only obligated to make predictions for
     // conditional branches.
     bool get_prediction(const branch_record_c* br, const op_state_c* os)
-    // bool get_prediction(address_t pc)
         {
             provider_component_index = -1; // init to -1 for future checking if we have updated the value
             
